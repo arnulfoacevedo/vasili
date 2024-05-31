@@ -123,11 +123,11 @@ async function fetchPrices() {
       params_tokenList,
       tokenList_endpoint,
     );
-    if (TokenList)
-      Object.assign(
-        selectedToken,
-        tokenFilter(TokenList.data.tokens, 'MANEKI')[0],
-      );
+    if (TokenList) {
+      const token_Filters = tokenFilter(TokenList.data.tokens, 'MANEKI');
+      token_Filters;
+      Object.assign(selectedToken, token_Filters ? token_Filters[0] : '');
+    }
     const liquidity = selectedToken.liquidity;
     const marketCap = selectedToken.mc;
     currentVal = currentPrice.data.value;

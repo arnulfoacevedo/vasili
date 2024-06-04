@@ -1,0 +1,10 @@
+{
+    "code": "200000",
+    "data": {
+      "symbol": "XBTUSDM",
+      "granularity": 1000,
+      "timePoint": 1717518351000,
+      "value": 70874.01,
+      "indexPrice": 70877.82
+    }
+  }

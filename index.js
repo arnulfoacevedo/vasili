@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -63,7 +62,7 @@ function fetchServerData(headers, params, baseurl) {
                 url = baseurl;
             }
             return [2 /*return*/, fetch(url, {
-                    headers: headers,
+                    headers: headers
                 })
                     .then(function (response) {
                     if (!response.ok) {
@@ -73,8 +72,7 @@ function fetchServerData(headers, params, baseurl) {
                 })
                     .then(function (data) {
                     return data;
-                })
-                    .catch(function (error) {
+                })["catch"](function (error) {
                     console.error('Error fetching data:', error);
                 })];
         });
@@ -88,7 +86,7 @@ function fetchData(headers, params, baseurl) {
             queryString = new URLSearchParams(params).toString();
             url = "".concat(baseurl, "?").concat(queryString);
             return [2 /*return*/, fetch(url, {
-                    headers: headers,
+                    headers: headers
                 })
                     .then(function (response) {
                     //--Save data to database--
@@ -116,8 +114,7 @@ function fetchData(headers, params, baseurl) {
                 })
                     .then(function (data) {
                     return data;
-                })
-                    .catch(function (error) {
+                })["catch"](function (error) {
                     console.error('Error fetching data:', error);
                 })];
         });
@@ -138,18 +135,18 @@ function fetchPrices() {
                     headers_price = {
                         Authorization: 'Bearer YourAccessTokenHere',
                         'Content-Type': 'application/json',
-                        'x-api-key': API_KEY,
+                        'x-api-key': API_KEY
                     };
                     params_price = {
-                        address: token_address,
+                        address: token_address
                     };
                     headers_tokenList = {
                         'x-api-key': API_KEY,
-                        'x-chain': 'solana',
+                        'x-chain': 'solana'
                     };
                     params_tokenList = {
                         sort_type: 'desc',
-                        srot_by: 'mc',
+                        srot_by: 'mc'
                     };
                     return [4 /*yield*/, fetchData(headers_price, params_price, price_endpoint)];
                 case 2:
@@ -157,6 +154,7 @@ function fetchPrices() {
                     return [4 /*yield*/, fetchData(headers_tokenList, params_tokenList, tokenList_endpoint)];
                 case 3:
                     TokenList = _a.sent();
+                    console.log({ TokenList: TokenList });
                     if (TokenList)
                         Object.assign(selectedToken, tokenFilter(TokenList.data.tokens, 'MANEKI')[0]);
                     liquidity = selectedToken.liquidity;
@@ -190,11 +188,12 @@ function updatePrices(diff, pStatus, currentprice, percentage, pLiquidity, marke
     var price = document.getElementById('price');
     var liquidity = document.getElementById('liquidity');
     var marketcap = document.getElementById('marketcap');
+    console.log('----');
     transaction.innerHTML = pStatus;
-    status.innerHTML = diff.toFixed(9) + '';
-    price.innerHTML = currentprice.toFixed(9) + '';
-    liquidity.innerHTML = pLiquidity.toFixed(9) + '';
-    marketcap.innerHTML = marketCap.toFixed(9) + '';
+    status.innerHTML = diff + '';
+    price.innerHTML = currentprice + '';
+    liquidity.innerHTML = pLiquidity + '';
+    marketcap.innerHTML = marketCap + '';
     return currentprice;
 }
 // Function to convert human readable time to Unix time

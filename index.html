@@ -1,841 +1,275 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1"
-    />
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+      <title>Stock Prices</title>
+      <!-- <link rel="stylesheet" href="./style/css/bootstrap.min.css"> -->
+      <style>
+        @font-face {
+          font-family: 'FantasticRock';
+          src: url('./style/fonts/f-fantastic-rock-font/FantasticRock-rg1VK.otf') format('truetype');
+          /* You can add additional file formats like .woff, .woff2, or .otf if needed */
+        }
+        @charset "UTF-8";
+        /* @import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400,700); */
 
-    <title>Liquidation Calculator</title>
+        body {
+          font-family: 'Open Sans', sans-serif;
+          font-weight: 300;
+          line-height: 1.42em;
+          color:#A7A1AE;
+          background-color:#1F2739;
+          width: 100vw;
+        }
 
-    <link href="bootstrap.min.css?d" rel="stylesheet" />
-    <link href="style.css?d" rel="stylesheet" />
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        h1 {
+          font-size:3em; 
+          font-weight: 300;
+          line-height:1em;
+          text-align: center;
+          color: #4DC3FA;
+        }
 
-    <style>
-      .form-group {
-        height: 30px;
-        border-radius: 5px;
-        margin-bottom: 0px;
-        padding: 3px;
-        border: 1px solid lightsteelblue;
-      }
+        h2 {
+          font-size:1em; 
+          font-weight: 300;
+          text-align: center;
+          display: block;
+          line-height:1em;
+          padding-bottom: 2em;
+          color: #FB667A;
+        }
 
-      .table {
-        width: auto;
-      }
+        h2 a {
+          font-weight: 700;
+          text-transform: uppercase;
+          color: #FB667A;
+          text-decoration: none;
+        }
 
-      .table1 td {
-        line-height: 30px !important;
-        adding: 10px !important;
-      }
+        .blue { color: #185875; }
+        .yellow { color: #FFF842; }
 
-      table {
-        margin: 50px;
-      }
+        .container th h1 {
+            font-weight: bold;
+            font-size: 1em;
+          text-align: center;
+          color: #185875;
+        }
 
-      thead {
-        font-weight: bold;
-      }
+        .container td {
+            font-weight: normal;
+            font-size: 1em;
+          -webkit-box-shadow: 0 2px 2px -2px #0E1119;
+            -moz-box-shadow: 0 2px 2px -2px #0E1119;
+                  box-shadow: 0 2px 2px -2px #0E1119;
+        }
 
-      .table1 tr td:nth-child(1) {
-        font-weight: bold;
-      }
+        .container {
+            text-align: left;
+            overflow: hidden;
+            width: 80%;
+            margin: 0 auto;
+          display: table;
+          padding: 0 0 8em 0;
+        }
 
-      .emoji {
-        object-fit: contain;
-        width: 1.375em;
-        height: 1.375em;
-        vertical-align: middle;
-      }
+        .container td, .container th {
+            padding-bottom: 2%;
+            padding-top: 2%;
+          padding-left:2%;  
+        }
 
-      .addmore {
-        width: 30px;
-      }
+        /* Background-color of the odd rows */
+        .container tr:nth-child(odd) {
+            background-color: #323C50;
+        }
 
-      .multi div input {
-        margin-top: 3px !important;
-      }
+        /* Background-color of the even rows */
+        .container tr:nth-child(even) {
+            background-color: #2C3446;
+        }
 
-      .multi div:nth-child(1) input {
-        margin-top: 0px !important;
-      }
+        .container th {
+            background-color: #1F2739;
+        }
 
-      .qfd {
-        background: rgb(0, 117, 255);
-        color: #fff;
-        padding: 0px 10px;
-        border: none;
-        box-shadow: 2px 2px 10px #ddd;
-      }
+        .container td:first-child { color: #FB667A; }
 
-      .qfd:hover {
-        background: rgb(0, 92, 200);
-      }
+        .container tr:hover {
+          background-color: #464A52;
+        -webkit-box-shadow: 0 6px 6px -6px #0E1119;
+            -moz-box-shadow: 0 6px 6px -6px #0E1119;
+                  box-shadow: 0 6px 6px -6px #0E1119;
+        }
 
-      input:read-only {
-        background: transparent;
-        border: transparent;
-        cursor: default;
-      }
+        .container td:hover {
+          background-color: #FFF842;
+          color: #403E10;
+          font-weight: bold;
+          
+          box-shadow: #7F7C21 -1px 1px, #7F7C21 -2px 2px, #7F7C21 -3px 3px, #7F7C21 -4px 4px, #7F7C21 -5px 5px, #7F7C21 -6px 6px;
+          transform: translate3d(6px, -6px, 0);
+          
+          transition-delay: 0s;
+            transition-duration: 0.4s;
+            transition-property: all;
+          transition-timing-function: line;
+        }
 
-      .container {
-        width: auto !important;
-      }
+        @media (max-width: 800px) {
+        .container td:nth-child(4),
+        .container th:nth-child(4) { display: none; }
+        }
+        .my-font {
+          font-family: 'FantasticRock', sans-serif;
+        }
 
-      .table1,
-      .table2 {
-        width: auto;
-        display: inline-block;
-        margin-bottom: 70px;
-      }
+        .progress2 {
+          text-align: center;
+          width: 60%;
+          height: 40px;
+          padding-left: 6px;
+          padding-right: 6px;
+          border-radius: 10px;
+          background: rgba(0, 0, 0, 0.25);  
+          box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.25), 0 1px rgba(255, 255, 255, 0.08);
+        }
 
-      .table2 {
-        vertical-align: top;
-      }
+        .board{
+          display: flex;
+          justify-content: center;
+          width: 100%;
+          margin-top: 10%;
+        }
 
-      .table2 tbody td {
-        height: 20px;
-      }
+        /* Additional styles for smooth range slider */
+        #myRange {
+          -webkit-appearance: none;
+          width: 100%;
+          height: 20px;
+          background: linear-gradient(to right, red, red, orange, orange, yellow, white, yellow, green, green, blue, blue);
+          border-radius: 5px;
+          outline: none; 
+          position: relative;
+          top: 50%;
+          transform: translateY(-170%);
+          transition: all 1s ease;
+        }
 
-      .leverage {
-        display: none;
-        color: #fff;
-        text-align: center;
-        background: rgb(239 64 97);
-        font-size: 2em;
-        height: 40px;
-        line-height: 40px;
-      }
+        #myRange::-webkit-slider-thumb {
+          appearance: none;
+          width: 20px;  
+          height: 30px;
+          background: lightgray;
+          border-radius: 10%;
+          cursor: pointer;
+          -webkit-transition: all 0.3s ease; /* Smooth transition for WebKit browsers */
+          transition: all 0.3s ease; 
+        }
 
-      .ordersubmit {
-        display: none;
-        color: #fff;
-        text-align: center;
-        background: #0dc17b;
-        font-size: 2em;
-        height: 40px;
-        line-height: 40px;
-      }
+        #myRange::-moz-range-thumb {
+          -webkit-transition: all 0.3s ease; /* Smooth transition for WebKit browsers */
+          appearance: none;
+          width: 20px;
+          height: 20px;
+          background: #fff;
+          border-radius: 50%;
+          cursor: pointer;
+          transition: all 0.3s ease; 
+        }
 
-      .liqerror {
-        font-size: 0.7em;
-        color: crimson;
-      }
+        #myRange::-ms-thumb {
+          appearance: none;
+          width: 20px;
+          height: 20px;
+          background: #fff;
+          border-radius: 50%;
+          cursor: pointer;
+          transition: all 1s ease; 
+        } 
 
-      .calctp1,
-      .calctp2,
-      .calctp3 {
-        margin: 0px;
-      }
+        table{
+          width: 80%;
+        }
 
-      .dropdown {
-        position: relative;
-        display: inline-block;
-      }
+        table > td, th{
+          width: 30px;
+        }
 
-      .dropdown-content {
-        display: none;
-        position: absolute;
-        background-color: #f9f9f9;
-        min-width: 160px;
-        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-        z-index: 1;
-      }
-
-      .dropdown-content a {
-        color: black;
-        padding: 12px 16px;
-        text-decoration: none;
-        display: block;
-      }
-
-      .dropdown-content a:hover {
-        background-color: #f1f1f1;
-      }
-
-      .show {
-        display: block;
-      }
-    </style>
+        .ticks {
+          display: flex;
+          justify-content: space-between;
+          position: relative;
+          top: -20px;
+          font-size: 10px;
+          font-weight: 500;
+        }
+        
+        #buy,#sell{
+          margin: 10px;
+          font-family: 'FantasticRock', sans-serif;
+        }
+      </style>
   </head>
 
   <body>
-    <div class="container">
-      <div class="table1">
-        <table
-          class="table table-bordered table-striped table-hover table-responsive shadow"
-        >
+    <!-- <h1><span class="blue">&lt;</span>Table<span class="blue">&gt;</span> <span class="yellow">Responsive</pan></h1> -->
+      <!-- <h2>Created with love by Vasili</h2> -->
+      
+      <table class="container">
+        <thead>
           <tr>
-            <td>Futures Contracts</td>
-            <td colspan="2">
-              <!-- <select id="listofcontracts" class="form-group">
-							<option value="">-Select </option>
-						</select> -->
-              <div class="dropdown" id="listofcontracts">
-                <input
-                  type="text"
-                  onclick="toggleDropdown()"
-                  placeholder="Select Category"
-                  class="form-group dropbtn"
-                  id="myInput"
-                  onkeyup="filterFunction()"
-                />
-                <div id="myDropdown" class="dropdown-content">
-                  <!-- <input
-								type="text"
-								placeholder="Search.."
-								id="myInput"
-								onkeyup="filterFunction()"
-							  /> -->
-                  <!-- <a onclick="selectItem(this)">Apple</a>
-							  <a onclick="selectItem(this)">Banana</a>
-							  <a onclick="selectItem(this)">Orange</a>
-							  <a onclick="selectItem(this)">Strawberry</a>
-							  <a onclick="selectItem(this)">Grape</a> -->
-                </div>
-              </div>
-            </td>
+            <th><h1>Transaction</h1></th>
+            <th><h1>Difference</h1></th>
+            <th><h1>Current Price</h1></th>
+            <th><h1>Liquidity</h1></th>
+            <th><h1>MarketCap</h1></th>
           </tr>
+        </thead>
+        <tbody>
           <tr>
-            <td>Market Price</td>
-            <td colspan="2">
-              $<input type="text" class="form-group" id="market" readonly />
-            </td>
+            <td id="transaction"></td>
+            <td id="status"></td>
+            <td id="price"></td>
+            <td id="liquidity"></td>
+            <td id="marketcap"></td>
           </tr>
-          <tr>
-            <td>
-              Entry Price<br />
-              <input type="checkbox" id="autorefresh" />
-              <span style="font-size: 0.8em; vertical-align: bottom" checked>
-                Auto Refresh</span
-              >
-            </td>
-            <td colspan="2">
-              $<input type="text" class="form-group" id="entry" value="" /><img
-                class="emoji refresh"
-                src="svgs/refresh.svg"
-                style="display: none; cursor: pointer"
-              />
-            </td>
-          </tr>
-          <tr>
-            <td>
-              Liquidation at
-              <div class="liqerror"></div>
-            </td>
-            <td colspan="2">
-              $<input
-                type="text"
-                class="form-group"
-                id="liq"
-                value=""
-              /><br /><span
-                ><b id="maxliq"></b>
-                <img
-                  class="emoji autofillliq"
-                  src="svgs/plus.svg"
-                  style="display: none; cursor: pointer"
-              /></span>
-            </td>
-          </tr>
-          <tr>
-            <td>Liquidation at %</td>
-            <td colspan="2">
-              <input type="text" class="form-group" id="liqp" readonly />
-            </td>
-          </tr>
-          <tr>
-            <td>Balance (Risk)</td>
-            <td colspan="2">
-              $<input type="text" class="form-group" id="balance" value="" />
-            </td>
-          </tr>
-
-          <tr style="display: none">
-            <td>Leverage</td>
-            <td colspan="2">
-              <input
-                type="text"
-                class="form-group"
-                id="lev"
-                size="4"
-                value="20"
-              />x
-            </td>
-          </tr>
-          <tr>
-            <td
-              colspan="3"
-              style="background: #ededed; border-top: 1.2px solid #ccc"
-            >
-              <hr style="margin: 0px" />
-            </td>
-          </tr>
-          <tr>
-            <td>Position</td>
-            <td colspan="2">
-              <select class="form-group" id="position">
-                <option>LONG</option>
-                <option>SHORT</option>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td>Margin<br />(USDT Qty after Lev)</td>
-            <td colspan="2">
-              $<input type="text" class="form-group" id="margin" readonly />
-            </td>
-          </tr>
-          <tr>
-            <td>Margin<br />(Coin Qty after Lev)</td>
-            <td colspan="2">
-              <input type="text" class="form-group" id="marginc" readonly />
-            </td>
-          </tr>
-          <tr>
-            <td
-              colspan="3"
-              style="background: #ededed; border-top: 1.2px solid #ccc"
-            >
-              <hr style="margin: 0px" />
-            </td>
-          </tr>
-          <tr>
-            <td>TP1</td>
-            <td colspan="2">
-              <select class="form-group" id="tpt1">
-                <option>usdt</option>
-                <option selected="selected">%</option></select
-              ><input type="text" class="form-group" id="tp1" value="100" />
-              <p class="calctp1"></p>
-            </td>
-          </tr>
-          <tr>
-            <td>TP2</td>
-            <td colspan="2">
-              <select class="form-group" id="tpt2">
-                <option>usdt</option>
-                <option selected="selected">%</option></select
-              ><input type="text" class="form-group" id="tp2" value="200" />
-              <p class="calctp2"></p>
-            </td>
-          </tr>
-          <tr>
-            <td>TP3</td>
-            <td colspan="2">
-              <select class="form-group" id="tpt3">
-                <option>usdt</option>
-                <option selected="selected">%</option></select
-              ><input type="text" class="form-group" id="tp3" value="300" />
-              <p class="calctp3"></p>
-            </td>
-          </tr>
-          <tr>
-            <td id="monitor"><img src="" style="width: 10px" /></td>
-            <td colspan="2">
-              <button class="qfd" id="submit">
-                <img class="emoji" src="svgs/submit.svg" /> Calculate
-              </button>
-            </td>
-          </tr>
-        </table>
-      </div>
-      <div class="table2">
-        <table
-          class="table table-bordered table-striped table-hover table-responsive shadow"
-        >
-          <thead>
-            <tr>
-              <td>Leverage</td>
-              <td>Investment</td>
-              <td>+Balance</td>
-              <td>Coins</td>
-              <td>TP1</td>
-              <td>TP2</td>
-              <td>TP3</td>
-              <td></td>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
+        </tbody>
+      </table>
+      <div class="board">
+        <div id="sell">Sell</div>
+        <div class="progress2">
+            <div class="ticks" style="width: 100%;">
+                <span>10</span>
+                <span>9</span>
+                <span>8</span>
+                <span>7</span>
+                <span>6</span>
+                <span>5</span>
+                <span>4</span>
+                <span>3</span>
+                <span>2</span>
+                <span>1</span>
+                <span>0</span>
+                <span>1</span>
+                <span>2</span>
+                <span>3</span>
+                <span>4</span>
+                <span>5</span>
+                <span>6</span>
+                <span>7</span>
+                <span>8</span>
+                <span>9</span>
+                <span>10</span>
+            </div>
+            <input type="range" id="myRange" min="-10" max="10" step='0.01' value="0">
+            <div id="sliderContainer" style="position: relative;">
+                <div id="valueDisplay" style="position: absolute; top: 0; left: 0;"></div>
+            </div>
+        </div>
+        <div id="buy">Buy</div>
     </div>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"
-      integrity="sha512-a+SUDuwNzXDvz4XrIcXHuCf089/iJAoN4lmrXJg18XnduKK6YlDHNRalv4yd1N40OKI80tFidF+rqTFKGPoWFQ=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script>
-    <script>
-      var bsc_apiEndpoint = "https://fapi.binance.com/fapi/v1/exchangeInfo";
-      var base_url = "https://api-futures.kucoin.com/";
-      var kcc_List_api = "api/v1/contracts/active";
-      var kcc_latestPrice_api = "api/v1/mark-price/{symbol}/current";
-      var api_key = "665df76641f0da0001583107";
-      var version = "2";
-      var contracts = [];
-      var timestamp = Date.now();
-      var apiPassphrase = "AEz/DYTg2IghN2Hdx3mwOIpBu4lPuuDb";
-      var apiSecret = "b23ae02d-46ab-4646-becc-7907c492a61f"; //'your_api_secret_key';
-
-      // Function to calculate HMAC signature
-      function calculateHmac(strToSign, api_Secret) {
-        var hmacDigest = CryptoJS.HmacSHA256(strToSign, api_Secret);
-        var signature = CryptoJS.enc.Base64.stringify(hmacDigest);
-        return signature;
-      }
-
-      // // Example usage
-      var passphrase = calculateHmac(apiPassphrase, apiSecret);
-      var strToSign = String(timestamp) + "GET" + kcc_List_api; //'your_string_to_sign';
-      var signature = calculateHmac(strToSign, apiSecret);
-
-      console.log({ signature, timestamp });
-      $(document).ready(function () {
-        list = $("#myDropdown")[0];
-        $.ajax({
-          type: "GET",
-          //url : bsc_apiEndpoint,
-          url: base_url + kcc_List_api,
-          // url:'virData.json',
-          // headers: {
-
-          // 	'Content-Type': 'application/json',
-          // 	'KC-API-KEY' : api_key,
-          // 	'KC-API-SIGN' : signature,
-          // 	'KC-API-TIMESTAMP' : timestamp,
-          // 	'KC-API-PASSPHRASE' : passphrase,
-          // 	'KC-API-KEY-VERSION' : version,
-          // },
-          error: function (data) {
-            console.log({ data });
-          },
-          success: function (data) {
-            //console.log(data['symbols'])
-            console.log("$$$$$$$$$", data);
-            n = 0;
-            for (var key in data["symbols"]) {
-              n++;
-              c = data["symbols"][key]["symbol"];
-              if (c.indexOf("BUSD") != c.length - 4) {
-                contracts.push(data["symbols"][key]["symbol"]);
-              }
-            }
-
-            // data.data.map(key => {
-            // 	console.log({key})
-            // 	if (key.symbol) {
-            // 		if (key.symbol.indexOf("BUSD") != (key.length - 4)) { console.log("contracts"); contracts.push(key.symbol) }
-            // 	}
-            // })
-
-            contracts.sort();
-            console.log({ contracts });
-            $("#myDropdown").append(
-              "<a onclick='selectItem(this)'>" +
-                contracts.join("</a><a onclick='selectItem(this)'>") +
-                "</a>"
-            );
-          },
-        });
-        getLeverages();
-      });
-      $(".refresh").click(function () {
-        $("#entry").val($("#market").val());
-        console.log("++++");
-      });
-      $(document).on("click", ".table2 input[type=radio]", function () {
-        $(".leverage").slideUp();
-      });
-      var thisBid;
-      var st;
-      function getLatestPrices() {
-        $(".refresh").show();
-        pair = $("#myInput").val();
-        console.log(pair);
-        $.ajax({
-          type: "GET",
-          // url: "https://fapi.binance.com/fapi/v1/depth?symbol=" + pair + "&limit=5",
-          // url : 'currentprice.json',
-          url: base_url + kcc_latestPrice_api,
-          success: function (data) {
-            //console.log(data["bids"][0][0])
-            console.log({ data });
-            //For Binance
-            // $("#market").val(data["bids"][0][0])
-            // if ($("#autorefresh").prop("checked")) {
-            // 	$("#entry").val(data["bids"][0][0])
-            // }
-            // if (data["bids"][0][0] >= thisBid) {
-            // 	$("#market").css("color", "green")
-            // } else $("#market").css("color", "red")
-            // thisBid = data["bids"][0][0]
-            //For Kocoin
-            $("#market").val(data.data.value);
-            if ($("#autorefresh").prop("checked")) {
-              $("#entry").val(data.data.value);
-            }
-            if (data.data.value >= thisBid) {
-              $("#market").css("color", "green");
-            } else $("#market").css("color", "red");
-            thisBid = data.data.value;
-          },
-        });
-        st = setTimeout(function () {
-          getLatestPrices();
-        }, 3000);
-      }
-      function resetform() {
-        $("#liqp").val("");
-        $("#liq").val("");
-        $("#entry").val("");
-        $("#market").val("");
-        $("#margin").val("");
-        $("#marginc").val("");
-        $("#maxliq").html("");
-        $(".ordersubmit").slideUp();
-        $(".leverage").slideUp();
-        clearTimeout(st);
-      }
-
-      $("#myInput").keydown(function (e) {
-        if (e.keyCode == "13") {
-          resetform();
-
-          pair = $(this).val();
-          getLatestPrices();
-          ap = "";
-          entry = $("#entry").val();
-          for (i = 1; i <= sobj[pair]; i++) {
-            ap +=
-              '<tr id="lev_' +
-              i +
-              '">' +
-              "<td>" +
-              i +
-              "x</td>" +
-              "<td></td>" +
-              "<td></td>" +
-              "<td></td>" +
-              "<td></td>" +
-              "<td></td>" +
-              "<td></td>" +
-              "<td></td>" +
-              "" +
-              "</tr>";
-          }
-          console.log({ pair });
-          $(".table2 tbody").html(ap);
-        }
-      });
-      var lev;
-      var sobj = {};
-      var allLev;
-      function getLeverages() {
-        $.ajax({
-          type: "GET",
-          url: "leverages.txt",
-          success: function (data) {
-            allLev = data;
-
-            newLev = allLev.replace("{", "").replace("}", "").split(",");
-
-            for (i = 0; i <= newLev.length - 1; i++) {
-              sobj[newLev[i].split(":")[0].split("'").join("").trim()] = newLev[
-                i
-              ]
-                .split(":")[1]
-                .split("'")
-                .join("")
-                .trim();
-            }
-            // console.log({sobj})
-          },
-        });
-      }
-      //
-      function round2(n) {
-        return Math.ceil(n * 100) / 100;
-      }
-      function round4(n) {
-        return Math.ceil(n * 10000) / 10000;
-      }
-      function round7(n) {
-        return Math.ceil(n * 10000000) / 10000000;
-      }
-      function dround(n, d) {
-        if (d.toString().indexOf(".") > -1) {
-          s = d.toString().split(".")[1].length;
-          return Math.floor(n * Math.pow(10, s)) / Math.pow(10, s);
-        }
-        return Math.round(n);
-      }
-      function liqError(a) {
-        $("#liq").css("border", "2px solid crimson");
-        $(".liqerror").html(a);
-        document.getElementById("liq").scrollIntoView();
-      }
-      var error = 0;
-      $(".autofillliq").click(function (e) {
-        $("#liq").val(dround(maxLiq2, entry));
-      });
-      jQuery.fn.ForceNumericOnly = function () {
-        this.keyup(function (e) {
-          $(this).val($(this).val().replace(/,/g, "."));
-        });
-      };
-      $("#liq").ForceNumericOnly();
-      $("#entry").ForceNumericOnly();
-      function calcTPs() {
-        balance = $("#balance").val();
-        tpt1 = $("#tpt1").val();
-        tp1 = $("#tp1").val();
-        tpt2 = $("#tpt2").val();
-        tp2 = $("#tp2").val();
-        tpt3 = $("#tpt3").val();
-        tp3 = $("#tp3").val();
-        if (tp1 != "") {
-          if (tpt1 == "%") {
-            $(".calctp1").html("$" + balance * (tp1 / 100));
-          } else if (tpt1 == "usdt") {
-            $(".calctp1").html((tp1 / balance) * 100 + "%");
-          }
-        }
-        if (tp2 != "") {
-          if (tpt2 == "%") {
-            $(".calctp2").html("$" + balance * (tp2 / 100));
-          } else if (tpt2 == "usdt") {
-            $(".calctp2").html((tp2 / balance) * 100 + "%");
-          }
-        }
-        if (tp3 != "") {
-          if (tpt3 == "%") {
-            $(".calctp3").html("$" + balance * (tp3 / 100));
-          } else if (tpt3 == "usdt") {
-            $(".calctp3").html((tp3 / balance) * 100 + "%");
-          }
-        }
-      }
-      $("#submit").click(function (e) {
-        calcTPs();
-
-        $(".liqerror").html("");
-        error = 0;
-        $(".table2 tbody td").html("");
-        $("#margin").val("");
-        $("#marginc").val("");
-        $("#cost").val("");
-        entry = $("#entry").val() * 1;
-        position = $("#position").val();
-        liq = $("#liq").val() * 1;
-        if (position == "LONG" && liq > entry) {
-          error = 1;
-          liqError("Liq cant be greater than entry");
-          console.log("liq is greater than the entry");
-        }
-        if (position == "SHORT" && liq < entry) {
-          error = 1;
-          liqError("Liq cant be smaller than entry");
-          console.log("liq is smaller than the entry");
-        }
-        liqp = (liq / entry) * 100;
-
-        if (error == 0) {
-          $("#liqp").val(round4(liqp) + "% of entry price");
-          balance = $("#balance").val();
-
-          pair = $("#myInput").val();
-          console.log("pair:", pair);
-          lev = sobj[pair];
-          // console.log('pair:',lev)
-          $.ajax({
-            type: "GET",
-            url: `liq.php?balance= ${balance}&entry=${entry}&position=${position}&liq=${liq}`,
-            success: function (data) {
-              console.log("margin:", data);
-              margin = parseInt(data);
-
-              cost = margin / lev;
-              maxLiq = 50 / lev;
-              maxLiq2 = ((100 - maxLiq) / 100) * entry * 0.9994;
-              minLiq2 = ((maxLiq + 100) / 100) * entry * 0.9994;
-
-              $(".autofillliq").show();
-
-              if (position == "LONG") {
-                $("#maxliq").html(
-                  "Max Liq Price: " +
-                    (dround(maxLiq2, entry) == isNaN()
-                      ? "Not exist"
-                      : dround(maxLiq2, entry))
-                );
-                if (cost >= $("#balance").val() * 2 && liq >= maxLiq2) {
-                  error = 1;
-                  errMsg = "Lower down liq price a bit";
-                }
-              }
-              if (position == "SHORT") {
-                $("#maxliq").html(
-                  "Min Liq Price: " +
-                    (dround(minLiq2, entry) == isNaN()
-                      ? "Not exist"
-                      : dround(minLiq2, entry))
-                );
-                if (cost >= $("#balance").val() * 2 && liq <= minLiq2) {
-                  error = 1;
-                  errMsg = "Raise liq price a bit";
-                }
-              }
-              if (error == 0) {
-                $("#liq").css("border", "1px solid lightsteelblue");
-                $("#margin").val(round2(margin));
-                $("#marginc").val(round4(margin / entry));
-                for (i = 1; i <= sobj[pair]; i++) {
-                  atp1 = 0;
-                  atp2 = 0;
-                  atp3 = 0;
-                  tpt1 = $("#tpt1").val();
-                  tp1 = $("#tp1").val();
-                  tpt2 = $("#tpt2").val();
-                  tp2 = $("#tp2").val();
-                  tpt3 = $("#tpt3").val();
-                  tp3 = $("#tp3").val();
-                  investment = margin / i;
-                  if (tp1 != "") {
-                    if (tpt1 == "%") {
-                      tp1 = (tp1 * balance) / investment;
-                      atp1 = (entry * (tp1 / i)) / 100;
-                    } else if (tpt1 == "usdt") {
-                      acp1 = (tp1 / investment) * 100;
-                      atp1 = (entry * (acp1 / i)) / 100;
-                    }
-                  }
-                  if (tp2 != "") {
-                    if (tpt2 == "%") {
-                      atp2 =
-                        (entry * ((tp2 * (balance / investment)) / i)) / 100;
-                    } else if (tpt2 == "usdt") {
-                      acp2 = (tp2 / investment) * 100;
-                      atp2 = (entry * (acp2 / i)) / 100;
-                    }
-                  }
-                  if (tp3 != "") {
-                    if (tpt3 == "%") {
-                      atp3 =
-                        (entry * ((tp3 * (balance / investment)) / i)) / 100;
-                    } else if (tpt3 == "usdt") {
-                      acp3 = (tp3 / investment) * 100;
-                      atp3 = (entry * (acp3 / i)) / 100;
-                    }
-                  }
-                  $("#lev_" + i + " td:nth-child(1)").html(i + "x");
-                  if (margin / i <= balance) {
-                    $("#lev_" + i).show();
-                    $("#lev_" + i + " td:nth-child(2)").html(
-                      round4(margin / i)
-                    );
-                    $("#lev_" + i + " td:nth-child(3)").html(
-                      round4(balance - margin / i)
-                    );
-                    $("#lev_" + i + " td:nth-child(4)").html(
-                      round4(margin / i / entry)
-                    );
-                    if (atp1 > 0)
-                      $("#lev_" + i + " td:nth-child(5)").html(
-                        dround(entry + atp1, entry)
-                      );
-                    if (atp2 > 0)
-                      $("#lev_" + i + " td:nth-child(6)").html(
-                        dround(entry + atp2, entry)
-                      );
-                    if (atp3 > 0)
-                      $("#lev_" + i + " td:nth-child(7)").html(
-                        dround(entry + atp3, entry)
-                      );
-                    $("#lev_" + i + " td:nth-child(8").html(
-                      "<input type='radio' name='trade' id='check_" + i + "'/>"
-                    );
-                  } else {
-                    $("#lev_" + i + " td:nth-child(2)").html("x");
-                    $("#lev_" + i + " td:nth-child(3)").html("x");
-                    $("#lev_" + i + " td:nth-child(4)").html("x");
-                    $("#lev_" + i + " td:nth-child(5)").html("x");
-                    $("#lev_" + i + " td:nth-child(6)").html("x");
-                    $("#lev_" + i + " td:nth-child(7)").html("x");
-                    $("#lev_" + i + " td:nth-child(8)").html("x");
-                    $("#lev_" + i).hide();
-                  }
-                }
-              } else {
-                console.log("cost:" + cost);
-                liqError();
-                liqError(errMsg);
-              }
-            },
-          });
-        }
-      });
-      function toggleDropdown() {
-        document.getElementById("myDropdown").classList.toggle("show");
-      }
-
-      function filterFunction() {
-        var input, filter, ul, li, a, i;
-        input = document.getElementById("myInput");
-        filter = input.value.toUpperCase();
-        div = document.getElementById("myDropdown");
-        a = div.getElementsByTagName("a");
-        for (i = 0; i < a.length; i++) {
-          txtValue = a[i].textContent || a[i].innerText;
-          if (txtValue.toUpperCase().indexOf(filter) > -1) {
-            a[i].style.display = "";
-          } else {
-            a[i].style.display = "none";
-          }
-        }
-      }
-
-      window.onclick = function (event) {
-        if (!event.target.matches(".dropbtn")) {
-          var dropdowns = document.getElementsByClassName("dropdown-content");
-          var i;
-          for (i = 0; i < dropdowns.length; i++) {
-            var openDropdown = dropdowns[i];
-            if (openDropdown.classList.contains("show")) {
-              openDropdown.classList.remove("show");
-            }
-          }
-        }
-      };
-      function selectItem(item) {
-        document.getElementById("myInput").value = item.textContent;
-        filterFunction();
-        getLatestPrices();
-        ap = "";
-        entry = $("#entry").val();
-        for (i = 1; i <= sobj[pair]; i++) {
-          ap +=
-            '<tr id="lev_' +
-            i +
-            '">' +
-            "<td>" +
-            i +
-            "x</td>" +
-            "<td></td>" +
-            "<td></td>" +
-            "<td></td>" +
-            "<td></td>" +
-            "<td></td>" +
-            "<td></td>" +
-            "<td></td>" +
-            "" +
-            "</tr>";
-        }
-        console.log("end", sobj[pair]);
-        $(".table2 tbody").html(ap);
-      }
-    </script>
+    <script src="index.js"></script>
   </body>
-</html>
+</html> 
+
